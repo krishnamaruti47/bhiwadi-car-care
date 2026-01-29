@@ -53,7 +53,7 @@ export default function Footer({ onBookNow }) {
                 <li className="flex items-start gap-3 group cursor-pointer">
                     <MapPin className="text-blue-500 shrink-0 mt-1 group-hover:text-white transition" size={18} />
                     <a href={MAP_LINK} target="_blank" rel="noopener noreferrer" className="group-hover:text-white transition">
-                        Plot No 123, RIICO Industrial Area, Phase 3, Bhiwadi, Rajasthan
+                        Opposite POLICE LINE, Rewari, Haryana 123401
                     </a>
                 </li>
                 <li className="flex items-center gap-3 group">
