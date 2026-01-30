@@ -1,14 +1,41 @@
 'use client'
 import { useState } from 'react';
+import { 
+  Wrench, 
+  Snowflake, 
+  Car, 
+  Sparkles, 
+  CircleDot, 
+  ClipboardCheck,
+  // Add these 4 new ones:
+  BadgeCheck,
+  Shield,
+  CreditCard,
+  Hammer
+} from 'lucide-react';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import About from './components/About'; 
 import BookingModal from './components/BookingModal';
 import Footer from './components/Footer';
 import { SERVICES } from '../lib/constants';
-import { Wrench, Snowflake, Car, Sparkles, CircleDot, ClipboardCheck } from 'lucide-react';
+// import { Wrench, Snowflake, Car, Sparkles, CircleDot, ClipboardCheck } from 'lucide-react';
 
-const IconMap = { Wrench, Snowflake, Car, Sparkles, CircleDot, ClipboardCheck };
+// const IconMap = { Wrench, Snowflake, Car, Sparkles, CircleDot, ClipboardCheck };
+
+const IconMap = {
+  Wrench: Wrench,
+  Snowflake: Snowflake,
+  Car: Car,
+  Sparkles: Sparkles,
+  CircleDot: CircleDot,
+  ClipboardCheck: ClipboardCheck,
+  // Add the mapping for the new ones here:
+  BadgeCheck: BadgeCheck,     // <--- For "Free & Paid Services"
+  Shield: Shield,             // <--- For "Insurance"
+  CreditCard: CreditCard,     // <--- For "Cashless"
+  Hammer: Hammer              // <--- For "Bodyshop"
+};
 
 export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -87,7 +114,7 @@ export default function Home() {
       <BookingModal 
         isOpen={isModalOpen} 
         onClose={() => setIsModalOpen(false)} 
-        preSelectedService={selectedService}
+        serviceName={selectedService}
       />
     </main>
   );

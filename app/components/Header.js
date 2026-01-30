@@ -1,7 +1,7 @@
 'use client'
-import { Phone, Menu, X } from 'lucide-react'; // Added X for close icon
+import { Phone, Menu, X } from 'lucide-react'; 
 import { useState } from 'react';
-import Link from 'next/link'; // Use Next.js Link for faster navigation
+import Link from 'next/link'; 
 
 export default function Header({ onBookNow }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -9,10 +9,17 @@ export default function Header({ onBookNow }) {
   return (
     <nav className="bg-white shadow-sm sticky top-0 z-50 border-b border-gray-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-        {/* Logo */}
-        <Link href="/" className="text-2xl font-black text-blue-700 tracking-tighter cursor-pointer">
-          MARUTI<span className="text-slate-900">CARZONE</span>
+        
+        {/* --- MODIFIED LOGO SECTION START --- */}
+        <Link href="/" className="flex flex-col leading-none cursor-pointer">
+          <span className="text-2xl font-black text-blue-700 tracking-tighter">
+            KRISHNA<span className="text-slate-900">MARUTIZONE</span>
+          </span>
+          <span className="text-[10px] font-bold text-slate-500 tracking-widest uppercase ml-0.5">
+            Maruti Authorised Service
+          </span>
         </Link>
+        {/* --- MODIFIED LOGO SECTION END --- */}
 
         {/* Desktop Nav */}
         <div className="hidden md:flex space-x-8 text-sm font-semibold text-slate-600 uppercase tracking-wide">
@@ -24,8 +31,8 @@ export default function Header({ onBookNow }) {
 
         {/* Action Buttons */}
         <div className="hidden md:flex items-center gap-4">
-          <a href="tel:+919876543210" className="flex items-center gap-2 text-slate-600 font-medium hover:text-blue-600">
-            <Phone size={18} /> <span>+91 9053777041</span>
+          <a href="tel:+919053777040" className="flex items-center gap-2 text-slate-600 font-medium hover:text-blue-600">
+            <Phone size={18} /> <span>+91 9053777040</span>
           </a>
           <button 
             onClick={onBookNow}

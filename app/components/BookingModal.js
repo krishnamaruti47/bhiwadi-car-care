@@ -1,127 +1,139 @@
 'use client'
-import { useState, useEffect } from 'react'; // <--- Added useEffect here
-import { supabase } from '../../lib/supabase';
-import { X, CheckCircle, Loader2 } from 'lucide-react';
+import { X, Loader2 } from 'lucide-react';
+import { useState } from 'react';
+import { createClient } from '@supabase/supabase-js';
 
-export default function BookingModal({ isOpen, onClose, preSelectedService }) {
-  const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
-  const [formData, setFormData] = useState({
-    name: '',
-    phone: '',
-    car: '',
-    service: 'General Service'
-  });
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+);
 
-  // --- THE FIX: Update form when the prop changes ---
-  useEffect(() => {
-    if (preSelectedService) {
-      setFormData(prev => ({ ...prev, service: preSelectedService }));
-    }
-  }, [preSelectedService]);
-  // ------------------------------------------------
+export default function BookingModal({ isOpen, onClose, serviceName }) {
+  // Added 'carModel' to state
+  const [formData, setFormData] = useState({ name: '', phone: '', carModel: '' });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   if (!isOpen) return null;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
+    setIsSubmitting(true);
 
-    const { error } = await supabase
-      .from('bookings')
-      .insert([{ 
-          customer_name: formData.name, 
-          phone_number: formData.phone, 
-          car_model: formData.car,
-          service_type: formData.service 
-      }]);
+    try {
+      // 1. SAVE TO DATABASE (Now includes car_model)
+      const { error } = await supabase
+        .from('bookings')
+        .insert([
+          { 
+            customer_name: formData.name, 
+            phone_number: formData.phone, 
+            service_type: serviceName,
+            car_model: formData.carModel, // <--- Saving Car Model
+            status: 'Lead (WhatsApp)'
+          }
+        ]);
 
-    setLoading(false);
+      if (error) throw error;
 
-    if (error) {
-      alert('Something went wrong. Please call us directly.');
-      console.error(error);
-    } else {
-      setSuccess(true);
-      setTimeout(() => {
-        setSuccess(false);
-        setFormData({ name: '', phone: '', car: '', service: 'General Service' });
-        onClose();
-      }, 3000);
+      // 2. SEND EMAIL ALERT (New Step)
+      // We don't await this because we don't want to slow down the WhatsApp redirect
+      fetch('/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.name,
+          phone: formData.phone,
+          carModel: formData.carModel,
+          service: serviceName
+        })
+      });
+
+      // 3. REDIRECT TO WHATSAPP (Message updated)
+      // "Hello... I have a Swift Dzire..."
+      const message = `Hello Krishna Maruti Zone, my name is ${formData.name}. I have a *${formData.carModel}* and I am interested in *${serviceName}*. My number is ${formData.phone}.`;
+      
+      const whatsappUrl = `https://wa.me/919053777040?text=${encodeURIComponent(message)}`;
+      
+      window.open(whatsappUrl, '_blank');
+      
+      onClose();
+      setFormData({ name: '', phone: '', carModel: '' });
+
+    } catch (err) {
+      console.error('Error saving booking:', err);
+      // Fallback message includes car model too
+      const fallbackMsg = `Hi, I have a ${formData.carModel} and want to book ${serviceName}`;
+      window.open(`https://wa.me/919053777040?text=${encodeURIComponent(fallbackMsg)}`, '_blank');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="bg-white rounded-2xl w-full max-w-md p-6 relative shadow-2xl">
-        <button onClick={onClose} className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 transition">
-          <X size={24} />
-        </button>
-
-        {success ? (
-          <div className="text-center py-10">
-            <div className="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
-              <CheckCircle size={40} />
-            </div>
-            <h3 className="text-2xl font-bold text-slate-900 mb-2">Booking Received!</h3>
-            <p className="text-slate-500">Our team will call you within 15 minutes to confirm details.</p>
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+      <div className="bg-white rounded-2xl w-full max-w-md shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
+        
+        <div className="bg-blue-600 p-6 flex justify-between items-start">
+          <div>
+            <h3 className="text-white text-xl font-bold">Quick Details</h3>
+            <p className="text-blue-100 text-sm mt-1">Tell us about your car</p>
           </div>
-        ) : (
-          <>
-            <h2 className="text-2xl font-bold text-slate-900 mb-1">Book Appointment</h2>
-            <p className="text-slate-500 mb-6 text-sm">Fill details for <span className="font-bold text-blue-600">{formData.service}</span></p>
+          <button onClick={onClose} className="text-blue-100 hover:text-white transition">
+            <X size={24} />
+          </button>
+        </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-1">Full Name</label>
-                <input 
-                  required
-                  className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition"
-                  placeholder="e.g. Rahul Sharma"
-                  value={formData.name}
-                  onChange={e => setFormData({...formData, name: e.target.value})}
-                />
-              </div>
-              
-              <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-1">Phone Number</label>
-                <input 
-                  required
-                  type="tel"
-                  pattern="[0-9]{10}"
-                  title="Please enter a valid 10-digit number"
-                  className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition"
-                  placeholder="e.g. 9876543210"
-                  value={formData.phone}
-                  onChange={e => setFormData({...formData, phone: e.target.value})}
-                />
-              </div>
+        <form onSubmit={handleSubmit} className="p-6 space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-1">Your Name</label>
+            <input 
+              required
+              type="text" 
+              className="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-600 outline-none"
+              placeholder="e.g. Rahul Kumar"
+              value={formData.name}
+              onChange={(e) => setFormData({...formData, name: e.target.value})}
+            />
+          </div>
 
-              <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-1">Car Model</label>
-                <input 
-                  required
-                  className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition"
-                  placeholder="e.g. Swift Dzire 2018"
-                  value={formData.car}
-                  onChange={e => setFormData({...formData, car: e.target.value})}
-                />
-              </div>
+          {/* --- NEW CAR MODEL INPUT --- */}
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-1">Car Model</label>
+            <input 
+              required
+              type="text" 
+              className="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-600 outline-none"
+              placeholder="e.g. Swift Dzire, Brezza, WagonR"
+              value={formData.carModel}
+              onChange={(e) => setFormData({...formData, carModel: e.target.value})}
+            />
+          </div>
 
-              {/* Hidden Service Field (So user sees it but cannot change it easily if you want strict booking) */}
-              <div className="hidden">
-                 <input value={formData.service} readOnly />
-              </div>
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-1">Phone Number</label>
+            <input 
+              required
+              type="tel" 
+              pattern="[0-9]{10}"
+              className="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-600 outline-none"
+              placeholder="e.g. 9876543210"
+              value={formData.phone}
+              onChange={(e) => setFormData({...formData, phone: e.target.value})}
+            />
+          </div>
 
-              <button 
-                disabled={loading}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-lg transition shadow-lg shadow-blue-600/20 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
-              >
-                {loading ? <Loader2 className="animate-spin" /> : 'Confirm Booking'}
-              </button>
-            </form>
-          </>
-        )}
+          <button 
+            type="submit" 
+            disabled={isSubmitting}
+            className="w-full bg-green-600 text-white py-4 rounded-xl font-bold text-lg hover:bg-green-700 transition shadow-lg shadow-green-600/20 flex items-center justify-center gap-2 mt-2"
+          >
+            {isSubmitting ? (
+              <>Saving... <Loader2 className="animate-spin" /></>
+            ) : (
+              'Continue to WhatsApp'
+            )}
+          </button>
+        </form>
       </div>
     </div>
   );

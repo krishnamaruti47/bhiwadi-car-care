@@ -7,12 +7,12 @@ export default function About() {
         
         {/* Sub-headline (Centered) */}
         <h4 className="text-center text-blue-700 font-bold text-xl mb-4 uppercase tracking-wider">
-          About BhiwadiCarCare
+          About KrishnaMarutiZone
         </h4>
         
         {/* Main Headline (Centered) */}
         <h2 className="text-center text-4xl md:text-2xl font-black text-slate-900 mb-8 leading-tight max-w-5xl mx-auto">
-          One Stop Destination For All Maruti Suzuki Services In Bhiwadi
+          One Stop Destination For All Maruti Suzuki Services In Rewari
         </h2>
         
         {/* Paragraph Text (Justified) */}

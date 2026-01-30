@@ -5,7 +5,7 @@ import { ChevronDown, ChevronUp } from 'lucide-react';
 const FAQS = [
   {
     question: "Do you offer free pickup and drop?",
-    answer: "Yes! We offer free pickup and drop service anywhere in Bhiwadi and Manesar industrial areas."
+    answer: "Yes! We offer free pickup and drop service anywhere in areas within 15 kms of Rewari."
   },
   {
     question: "Do you use genuine parts?",

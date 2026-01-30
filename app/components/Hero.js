@@ -16,7 +16,7 @@ export default function Hero({ onBookNow }) {
       <div className="relative z-10 max-w-7xl mx-auto text-center">
         <div className="inline-flex items-center gap-2 bg-blue-600/20 border border-blue-500/30 px-4 py-1.5 rounded-full text-blue-300 text-xs font-bold uppercase tracking-wider mb-6 backdrop-blur-sm">
           <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
-          Serving Bhiwadi 
+          Serving Rewari and Nearby Areas
         </div>
         
         <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold mb-6 leading-tight tracking-tight">
@@ -38,7 +38,7 @@ export default function Hero({ onBookNow }) {
             Book Service
           </button>
           <a 
-            href="tel:+919053777041" 
+            href="tel:+919053777040" 
             className="flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 backdrop-blur-md text-white border border-white/20 px-8 py-4 rounded-xl font-bold text-lg transition"
           >
             <Phone size={20} /> 
