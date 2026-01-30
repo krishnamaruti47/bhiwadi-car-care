@@ -146,7 +146,7 @@ export default function BookingModal({ isOpen, onClose, serviceName }) {
         {/* Form */}
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">Your Name (Optional)</label>
+            <label className="block text-sm font-medium text-slate-700 mb-1">Your Name</label>
             <input 
               type="text" 
               className="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-600 outline-none transition"
@@ -157,7 +157,7 @@ export default function BookingModal({ isOpen, onClose, serviceName }) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">Car Model (Optional)</label>
+            <label className="block text-sm font-medium text-slate-700 mb-1">Car Model</label>
             <input 
               type="text" 
               className="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-600 outline-none transition"
@@ -168,7 +168,7 @@ export default function BookingModal({ isOpen, onClose, serviceName }) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">Phone Number (Optional)</label>
+            <label className="block text-sm font-medium text-slate-700 mb-1">Phone Number</label>
             <input 
               type="tel" 
               className="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-600 outline-none transition"
