@@ -26,7 +26,7 @@ export default function Hero({ onBookNow }) {
         
         <p className="text-lg md:text-xl text-slate-300 mb-10 max-w-2xl mx-auto leading-relaxed">
           Genuine parts, transparent pricing, and free pickup & drop. 
-          We are Bhiwadi's most trusted multi-brand car workshop.
+          We are Rewari's most trusted multi-brand car workshop.
         </p>
         
         <div className="flex flex-col sm:flex-row justify-center gap-4">

@@ -13,7 +13,7 @@ export default function Footer({ onBookNow }) {
           <div className="col-span-1 md:col-span-2">
             <h4 className="text-white text-2xl font-black tracking-tight mb-6">KRISHNA<span className="text-blue-500">MARUTIZONE</span></h4>
             <p className="mb-6 max-w-sm text-slate-400">
-              The most reliable car workshop in Bhiwadi. We use advanced diagnostic tools and genuine spare parts to ensure your car runs like new.
+              The most reliable car workshop in Rewari. We use advanced diagnostic tools and genuine spare parts to ensure your car runs like new.
             </p>
             <div className="flex items-center gap-4">
                 {/* Phone Button */}

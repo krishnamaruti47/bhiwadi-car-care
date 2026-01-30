@@ -17,10 +17,10 @@ export default function About() {
         
         {/* Paragraph Text (Justified) */}
         <p className="text-justify text-slate-600 text-lg md:text-xl leading-relaxed max-w-4xl mx-auto font-light">
-          BhiwadiCarCare is the ultimate marketplace and aggregator for all Maruti car services in Bhiwadi. 
+          Maruti Car Zone is the ultimate marketplace and aggregator for all Maruti car services in Rewari. 
           We specialize exclusively in <strong className="font-semibold text-slate-900">Maruti Suzuki</strong> vehicles, ensuring factory-standard care for everything from an 
           Alto to a Grand Vitara. Whether you are searching for periodic servicing, need roadside assistance, 
-          seeking car inspection services, or looking for denting and painting in Bhiwadi, we have got you covered.
+          seeking car inspection services, or looking for denting and painting in Rewari, we have got you covered.
         </p>
 
       </div>
